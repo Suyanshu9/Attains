@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:leave_application/Pages/signup_page.dart';
 
+import 'ForgotPassword.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -137,18 +139,18 @@ class _LoginPageState extends State<LoginPage> {
                   )
                 ],
               ),
-              SizedBox(height: 10,),
-              TextButton(
-                  onPressed: (){},
+              TextButton(onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ForgotPassword()),
+                );
+              },
                   child: Text(
-                      "Forgot Password?",
-                    style: GoogleFonts.lato(
-                      textStyle:TextStyle(
-                        color: Colors.cyan,
-                      )
-                    ),
+                    "Forgot Password?",
+                    style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.cyan,fontSize: 14)),
                   )
               )
+
             ],
           ),
         ),
