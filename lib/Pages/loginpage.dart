@@ -93,6 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                   child:  Padding(
                     padding: EdgeInsets.all(4),
                     child: TextField(
+                      obscureText: true,
                       controller: passwordController,
                       decoration: InputDecoration(
                         hintText: "Password"

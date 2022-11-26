@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:leave_application/Pages/loginpage.dart';
+import 'package:leave_application/core/AuthException.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -139,7 +140,11 @@ class _SignUpState extends State<SignUp> {
           barrierDismissible: false,
           builder: (context)=>Center(child: CircularProgressIndicator(),)
       );
-      UserCredential result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text.trim(), password: passwordController.text.trim());
+      UserCredential result = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim()
+      );
+
       User? user = result.user;
       if (user != null) {
         //add display name for just created user
@@ -152,8 +157,10 @@ class _SignUpState extends State<SignUp> {
         print(user);
       }
       Navigator.pop(context);
-    } on Exception catch (e) {
+    } on FirebaseAuthException catch (e) {
+      // _status = AuthExceptionHandler.handleException(e);
       print(e);
     }
+    // return _status;
   }
 }

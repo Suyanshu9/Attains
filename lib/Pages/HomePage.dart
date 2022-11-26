@@ -9,7 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nearby_connections/nearby_connections.dart';
-
+import 'package:leave_application/drawer.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -25,16 +25,11 @@ class _HomePageState extends State<HomePage> {
   String? tempFileUri; //reference to the file currently being transferred
   Map<int, String> map =
   Map();
+  int butt = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.power_settings_new),
-        onPressed: (){
-          FirebaseAuth.instance.signOut();
-        },
-      ),
       appBar: AppBar(
         backgroundColor: Colors.black,
         title:Text("Permissions ->"),
@@ -73,127 +68,173 @@ class _HomePageState extends State<HomePage> {
           )
         ],
         ),
+
+      drawer:
+      Theme(
+          data: new ThemeData(
+            canvasColor: Color.alphaBlend(Color.fromRGBO(18, 18, 18, 18), Color.fromRGBO(16, 18, 28, 1)),
+
+          ),
+          child: const NavigationDrawer()),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 5),
-        child: Column(
-          children: [
-            Row(
-              // children: [
-              //   Expanded(child: SizedBox()),
-              //   CircleAvatar(
-              //     backgroundColor: Colors.red,
-              //     child: IconButton(
-              //       icon: Icon(Icons.arrow_upward),
-              //       onPressed: ()async {
-              //         try {
-              //           bool a = await Nearby().startAdvertising(
-              //             id!,
-              //             strategy,
-              //             onConnectionInitiated: onConnectionInit,
-              //             onConnectionResult: (id, status) {
-              //               showSnackbar(status);
-              //             },
-              //             onDisconnected: (id) {
-              //               showSnackbar(
-              //                   "Disconnected: ${endpointMap[id]!.endpointName}, id $id");
-              //               setState(() {
-              //                 endpointMap.remove(id);
-              //               });
-              //             },
-              //           );
-              //           showSnackbar("ADVERTISING: " + a.toString());
-              //         } catch (exception) {
-              //           showSnackbar(exception);
-              //         }
-              //       },
-              //     ),
-              //   ),
-              //   ElevatedButton(
-              //       child: Text("Stop Advertising"),
-              //       onPressed: () async {
-              //         await Nearby().stopAdvertising();
-              //       }
-              //   ),
-              //   Expanded(child: SizedBox())
-              // ],
-            ),
-            Row(
-              children: [
-                Expanded(child: SizedBox()),
-                ElevatedButton(
-                  child: Text("Start Discovery"),
-                  onPressed: () async {
-                    try {
-                      bool a = await Nearby().startDiscovery(
-                        id!,
-                        strategy,
-                        onEndpointFound: (id, name, serviceId) {
-                          // show sheet automatically to request connection
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (builder) {
-                              return Center(
-                                child: Column(
-                                  children: <Widget>[
-                                    Text("id: " + id),
-                                    Text("Name: " + name),
-                                    Text("ServiceId: " + serviceId),
-                                    ElevatedButton(
-                                      child: Text("Request Connection"),
-                                      onPressed: () {
-                                        FirebaseFirestore.instance.collection('std').doc().set({
-                                          "attendance":id,
-                                          "check":true
-                                        }
-                                        );
-                                        Navigator.pop(context);
-                                        Nearby().requestConnection(
-                                          "FUCK",
-                                          id,
-                                          onConnectionInitiated: (id, info) {
-                                            onConnectionInit(id, info);
-                                          },
-                                          onConnectionResult: (id, status) {
-                                            showSnackbar(status);
-                                          },
-                                          onDisconnected: (id) {
-                                            setState(() {
-                                              endpointMap.remove(id);
-                                            });
-                                            showSnackbar(
-                                                "Disconnected from: ${endpointMap[id]!.endpointName}, id $id");
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                // children: [
+                //   Expanded(child: SizedBox()),
+                //   CircleAvatar(
+                //     backgroundColor: Colors.red,
+                //     child: IconButton(
+                //       icon: Icon(Icons.arrow_upward),
+                //       onPressed: ()async {
+                //         try {
+                //           bool a = await Nearby().startAdvertising(
+                //             id!,
+                //             strategy,
+                //             onConnectionInitiated: onConnectionInit,
+                //             onConnectionResult: (id, status) {
+                //               showSnackbar(status);
+                //             },
+                //             onDisconnected: (id) {
+                //               showSnackbar(
+                //                   "Disconnected: ${endpointMap[id]!.endpointName}, id $id");
+                //               setState(() {
+                //                 endpointMap.remove(id);
+                //               });
+                //             },
+                //           );
+                //           showSnackbar("ADVERTISING: " + a.toString());
+                //         } catch (exception) {
+                //           showSnackbar(exception);
+                //         }
+                //       },
+                //     ),
+                //   ),
+                //   ElevatedButton(
+                //       child: Text("Stop Advertising"),
+                //       onPressed: () async {
+                //         await Nearby().stopAdvertising();
+                //       }
+                //   ),
+                //   Expanded(child: SizedBox())
+                // ],
+              ),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Expanded(child: SizedBox()),
+                    Center(
+                      child: ElevatedButton(
+
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                          )),
+                          backgroundColor: MaterialStateProperty.all<Color>(butt==0?Colors.green:Colors.red),
+                          // shape: RoundedRectangleBorder(
+                          //   borderRadius: MaterialStateProperty.all<BorderRadius>()
+                          // )
+
+                        ),
+
+
+                        child: Text("Start Discovery"),
+
+                        onPressed: () async {
+                          if(butt == 0) {
+                            try {
+                              bool a = await Nearby().startDiscovery(
+                                id!,
+                                strategy,
+                                onEndpointFound: (id, name, serviceId) {
+                                  // show sheet automatically to request connection
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (builder) {
+                                      return Center(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Text("id: " + id),
+                                            Text("Name: " + name),
+                                            Text("ServiceId: " + serviceId),
+                                            ElevatedButton(
+                                              child: Text("Request Connection"),
+                                              onPressed: () {
+                                                FirebaseFirestore.instance
+                                                    .collection('std').doc().set({
+                                                  "attendance": id,
+                                                  "check": true
+                                                }
+                                                );
+                                                Navigator.pop(context);
+                                                Nearby().requestConnection(
+                                                  "FUCK",
+                                                  id,
+                                                  onConnectionInitiated: (id,
+                                                      info) {
+                                                    onConnectionInit(id, info);
+                                                  },
+                                                  onConnectionResult: (id, status) {
+                                                    showSnackbar(status);
+                                                  },
+                                                  onDisconnected: (id) {
+                                                    setState(() {
+                                                      endpointMap.remove(id);
+                                                    });
+                                                    showSnackbar(
+                                                        "Disconnected from: ${endpointMap[id]!
+                                                            .endpointName}, id $id");
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                onEndpointLost: (id) {
+                                  showSnackbar(
+                                      "Lost discovered Endpoint: ${endpointMap[id]!
+                                          .endpointName}, id $id");
+                                },
                               );
-                            },
-                          );
+                              showSnackbar("DISCOVERING: " + a.toString());
+                            } catch (e) {
+                              showSnackbar(e);
+                            }
+                            setState(() {
+                              butt = 1;
+                              Text("Stop Discovery");
+                            });
+                          }
+                          else if(butt == 1){
+                            await Nearby().stopDiscovery();
+                            setState(() {
+                              butt = 0;
+                            });
+                          }
                         },
-                        onEndpointLost: (id) {
-                          showSnackbar(
-                              "Lost discovered Endpoint: ${endpointMap[id]!.endpointName}, id $id");
-                        },
-                      );
-                      showSnackbar("DISCOVERING: " + a.toString());
-                    } catch (e) {
-                      showSnackbar(e);
-                    }
-                  },
+                      ),
+                    ),
+                    // Expanded(child: SizedBox()),
+                    // ElevatedButton(
+                    //   child: Text("Stop Discovery"),
+                    //   onPressed: () async {
+                    //     await Nearby().stopDiscovery();
+                    //   },
+                    // ),
+                    // Expanded(child: SizedBox()),
+                  ],
                 ),
-                Expanded(child: SizedBox()),
-                ElevatedButton(
-                  child: Text("Stop Discovery"),
-                  onPressed: () async {
-                    await Nearby().stopDiscovery();
-                  },
-                ),
-                Expanded(child: SizedBox()),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
 
